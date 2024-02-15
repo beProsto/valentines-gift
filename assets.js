@@ -1,10 +1,14 @@
 // Meshes and textures to preload
 const preloadTextures = {
-    hearts: "./assets/hearts-texture.png"
+    hearts: "./assets/hearts-texture.png",
+    fox: "./assets/fox_sleep.png",
+    ocelot: "./assets/ocelot.png"
 };
 const preloadMeshes   = {
     hearts: "./assets/hearts.obj",
-    tri: "./assets/tri.obj"
+    tri: "./assets/tri.obj",
+    fox: "./assets/foxo.obj",
+    ocelot: "./assets/oceloto.obj"
 };
 
 const preloadAssets = async () => {

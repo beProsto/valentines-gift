@@ -8,10 +8,20 @@ const main = async () => {
     renderer.setup(vertCode, fragCode);
     
     // Create game objects
-    const heart = new GameObject("hearts", "hearts");
-    renderer.addGameObject(heart);
-    matrix.scale(heart.transform.m4x4, 0.1, 0.1, 0.1);
+    const fox = new GameObject("fox", "fox");
+    renderer.addGameObject(fox);
+    matrix.translate(fox.transform.m4x4, 0.5, 0, 0);
+    matrix.scale(fox.transform.m4x4, 0.1, 0.1, 0.1);
+    
+    const ocelot = new GameObject("ocelot", "ocelot");
+    renderer.addGameObject(ocelot);
+    matrix.translate(ocelot.transform.m4x4, -0.5, 0.3, 0);
+    matrix.scale(ocelot.transform.m4x4, 0.1, 0.1, 0.1);
 
+    const hearts = new GameObject("hearts", "hearts");
+    matrix.scale(hearts.transform.m4x4, 0.1, 0.1, 0.1);
+    matrix.translate(hearts.transform.m4x4, 0.0, 0.5, 0);
+    renderer.addGameObject(hearts);
 
     // Initiate the game loop
     requestAnimationFrame(getFirstTime);

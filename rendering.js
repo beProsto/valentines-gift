@@ -123,6 +123,7 @@ const renderer = {
             matrix.rotatey(renderer.view, input.x/100);
             matrix.rotatex(renderer.view, input.y/100);
         }
+        matrix.translate(renderer.view, 0, 0, -2)
         gl.uniformMatrix4fv(renderer.viewMatrixLocation, false, renderer.view);
 
         for(const obj of renderer.gameObjects) {
