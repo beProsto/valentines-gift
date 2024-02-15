@@ -6,7 +6,6 @@ const preloadTextures = {
 };
 const preloadMeshes   = {
     hearts: "./assets/hearts.obj",
-    tri: "./assets/tri.obj",
     fox: "./assets/rayferric.obj",
     ocelot: "./assets/beprosto.obj"
 };
