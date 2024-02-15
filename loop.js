@@ -9,12 +9,11 @@ const loopUpdate = (time) => {
     gameUpdate(deltaTime, time);
 
     // Rendering
-    renderer.update();
+    renderer.update(deltaTime, time);
 
     // console.log(`x: ${input.x}, delta: ${input.dx}`);
     // console.log(`Mouse Button: ${mouse.button}`)    
     
-
     // Update input
     inputUpdate();
 

@@ -52,26 +52,23 @@ class Mesh {
         gl.drawArrays(gl.TRIANGLES, 0, this.vertices);
     }
 }
+class Camera {
+    constructor() {
+        this.projectionMatrix = matrix.create();
+        this.viewMatrix = matrix.create();
+        this.recalculateProjection();
+    }
+    recalculateProjection() {
+        matrix.perspective(this.projectionMatrix, Math.PI / 2, canvas.width/canvas.height, 0.1, 100);
+    }
+}
 
 const textures = {};
 const meshes = {};
 
-class Transform {
-    constructor(pos = [0,0,0], rot = [0,0,0], scale = 1) {
-        this.pos = pos;
-        this.rot = rot;
-        this.scale = scale;
-        this.m4x4 = matrix.create();
-    }
-
-    getMatrix() {
-        return this.m4x4;
-    }
-}
-
 class GameObject {
-    constructor(meshName, textureName, transform = new Transform()) {
-        this.transform = transform;
+    constructor(meshName, textureName, transformMatrix = matrix.create()) {
+        this.transformMatrix = transformMatrix;
         this.meshName = meshName;
         this.textureName = textureName;
     }
@@ -82,6 +79,9 @@ const renderer = {
     addGameObject(obj) {
         this.gameObjects.push(obj);
     },
+    
+    camera: new Camera(),
+
     setup: (vertexShaderCode, fragmentShaderCode) => {
         gl.enable(gl.DEPTH_TEST);
 
@@ -103,35 +103,27 @@ const renderer = {
         renderer.projMatrixLocation = gl.getUniformLocation(renderer.shader, "u_Projection");
         renderer.viewMatrixLocation = gl.getUniformLocation(renderer.shader, "u_View");
         renderer.modelMatrixLocation = gl.getUniformLocation(renderer.shader, "u_Model");
+
         gl.uniformMatrix4fv(renderer.projMatrixLocation, false, matrix.create());
         gl.uniformMatrix4fv(renderer.viewMatrixLocation, false, matrix.create());
-        renderer.zoom = 1.0;
-        renderer.xrot = 0.0;
-        renderer.yrot = 0.0;
+        gl.uniformMatrix4fv(renderer.modelMatrixLocation, false, matrix.create());
+        
+        
+        const onresize = () => {
+            renderer.camera.recalculateProjection();
+            gl.uniformMatrix4fv(renderer.projMatrixLocation, false, renderer.camera.projectionMatrix);
+        };
+        onresize();
+        window.addEventListener("resize", onresize);
     },
-    update: (dt) => {
-        gl.clearColor(0.3, 0.5, 1.0, 1.0);
+    update: (dt, time) => {
+        gl.clearColor(0.3, 0.6, 1.0, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        const cam = matrix.create();
-        matrix.perspective(cam, Math.PI / 2, canvas.width/canvas.height, 0.1, 1000);
-        gl.uniformMatrix4fv(renderer.projMatrixLocation, false, cam);
-        
-        renderer.view = matrix.create();
-        matrix.scale1to1(renderer.view, renderer.zoom);
-        renderer.zoom += input.dzoom/500;
-        console.log("zoom " + input.zoom);
-        if(input.pressed) {
-            renderer.xrot += input.dy / 100;
-            renderer.yrot += input.dx / 100;
-        }
-        matrix.rotatex(renderer.view, renderer.xrot);
-        matrix.rotatey(renderer.view, renderer.yrot);
-        matrix.translate(renderer.view, 0, 0, -2)
-        gl.uniformMatrix4fv(renderer.viewMatrixLocation, false, renderer.view);
+        gl.uniformMatrix4fv(renderer.viewMatrixLocation, false, renderer.camera.viewMatrix);
 
         for(const obj of renderer.gameObjects) {
-            gl.uniformMatrix4fv(renderer.modelMatrixLocation, false, obj.transform.getMatrix());
+            gl.uniformMatrix4fv(renderer.modelMatrixLocation, false, obj.transformMatrix);
             textures[obj.textureName].bind();
             meshes[obj.meshName].draw();
         }

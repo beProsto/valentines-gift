@@ -5,11 +5,11 @@ const matrix = {
         return m;
     },
     identity: (m) => {
-        for(e of m) e = 0.0;
+        for(let i = 0; i < 16; i++) m[i] = 0.0;
         m[0] = m[5] = m[10] = m[15] = 1.0;
     },
     perspective: (m, degrees, aspect, near, far) => {
-        for(e of m) e = 0.0;
+        for(let i = 0; i < 16; i++) m[i] = 0.0;
         const frustumScale = 1.0 / Math.tan(degrees / 2.0);
         m[0] = frustumScale / aspect;
         m[5] = frustumScale;
