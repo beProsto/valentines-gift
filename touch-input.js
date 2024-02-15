@@ -1,5 +1,7 @@
-const calcDistance = (y1,y2) => {
-    return Math.max(y1, y2) - Math.min(y1, y2);
+const calcDistance = (x1, y1, x2, y2) => {
+    const triW = x1 - x2;
+    const triH = y1 - y2;
+    return Math.sqrt(triW*triW + triH*triH);
 };
 
 window.ontouchstart = (e) => {
@@ -8,7 +10,7 @@ window.ontouchstart = (e) => {
     input.zooming = false;
     if(input.pressed) {
         input.zooming = true;
-        input.zoomdistance = calcDistance(touch.clientY, input.x);
+        input.zoomdistance = calcDistance(touch.clientX, touch.clientY, input.x, input.y);
     }
     else {
         input.x = touch.clientX; 
@@ -30,7 +32,7 @@ window.ontouchmove = (e) => {
     if(input.zooming) {
 	    const touch2 = e.changedTouches[1];
         
-        const zoomdistance = calcDistance(touch.clientY, touch2.clientY);
+        const zoomdistance = calcDistance(touch.clientX, touch.clientY, touch2.clientX, touch2.clientY);
         const zoomdifference = zoomdistance - input.zoomdistance;
         input.zoomdistance = zoomdistance;
 

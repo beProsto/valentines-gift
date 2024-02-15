@@ -106,6 +106,8 @@ const renderer = {
         gl.uniformMatrix4fv(renderer.projMatrixLocation, false, matrix.create());
         gl.uniformMatrix4fv(renderer.viewMatrixLocation, false, matrix.create());
         renderer.zoom = 1.0;
+        renderer.xrot = 0.0;
+        renderer.yrot = 0.0;
     },
     update: (dt) => {
         gl.clearColor(0.3, 0.5, 1.0, 1.0);
@@ -120,9 +122,11 @@ const renderer = {
         renderer.zoom += input.dzoom/500;
         console.log("zoom " + input.zoom);
         if(input.pressed) {
-            matrix.rotatey(renderer.view, input.x/100);
-            matrix.rotatex(renderer.view, input.y/100);
+            renderer.xrot += input.dy / 100;
+            renderer.yrot += input.dx / 100;
         }
+        matrix.rotatex(renderer.view, renderer.xrot);
+        matrix.rotatey(renderer.view, renderer.yrot);
         matrix.translate(renderer.view, 0, 0, -2)
         gl.uniformMatrix4fv(renderer.viewMatrixLocation, false, renderer.view);
 

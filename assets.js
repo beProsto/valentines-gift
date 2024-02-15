@@ -1,7 +1,7 @@
 // Meshes and textures to preload
 const preloadTextures = {
     hearts: "./assets/hearts-texture.png",
-    fox: "./assets/fox_sleep.png",
+    fox: "./assets/fox.png",
     ocelot: "./assets/ocelot.png"
 };
 const preloadMeshes   = {
