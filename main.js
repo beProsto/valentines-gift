@@ -38,7 +38,7 @@ const main = async () => {
         matrix.translate(game.heartcloud[i].transformMatrix, ...position);
         game.heartcloud[i].velocity = position;
         game.heartcloud[i].rotationSpeed = (Math.abs(position[0])+Math.abs(position[2])) / 10;
-        game.heartcloud[i].terminalVelocity = -100 + (50 * Math.random());
+        game.heartcloud[i].terminalVelocity = -1 + (0.7 * Math.random());
         game.heartcloud[i].height = position[1];
     }
     
@@ -82,7 +82,7 @@ const gameUpdate = (dt, t) => {
         const zvel = game.heartcloud[i].velocity[2] * dt * 2;
         
         game.heartcloud[i].velocity[1] -= 10*dt*dt;
-        game.heartcloud[i].velocity[1] = Math.max(game.heartcloud[i].terminalVelocity * dt, game.heartcloud[i].velocity[1]);
+        game.heartcloud[i].velocity[1] = Math.max(game.heartcloud[i].terminalVelocity, game.heartcloud[i].velocity[1]);
         
         game.heartcloud[i].height += yvel;
         
